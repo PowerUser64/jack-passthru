@@ -1,4 +1,4 @@
-#include <fmt/format.h>
+// #include <fmt/format.h>
 #include <jack/jack.h>
 
 #include <cstring>
@@ -68,9 +68,9 @@ jack_client_t *initJack(std::string clientName, PortMap &ports) {
   jack_client_t *client = jack_client_open(shortenedClientName.c_str(), JackNoStartServer, &status);
 
   if (client == nullptr) {
-    std::cout << fmt::format("jack_client_open failed: status {0:#x}", status) << std::endl;
+    std::cout << "jack_client_open failed: status " << status << std::endl;
     if (status & JackServerFailed) {
-      std::cout << fmt::format("Unable to connect to JACK server") << std::endl;
+      std::cout << "Unable to connect to JACK server" << std::endl;
     }
     exit(-1);
   }
@@ -81,7 +81,7 @@ jack_client_t *initJack(std::string clientName, PortMap &ports) {
 
   if (status & JackNameNotUnique) {
     shortenedClientName = std::string(jack_get_client_name(client));
-    std::cout << fmt::format("Unique name: {} assigned.", shortenedClientName);
+    std::cout << "Unique name: " << shortenedClientName << " assigned.";
   }
 
   uint32_t sampleRate = 0;
@@ -96,10 +96,10 @@ jack_client_t *initJack(std::string clientName, PortMap &ports) {
 
 void portSetup(jack_client_t *client, uint32_t numPorts, PortMap &ports) {
   for (uint32_t i = 0; i < numPorts; ++i) {
-    std::string inputPortname = fmt::format("input_{}", i);
+    std::string inputPortname = "input_" << i;
     jack_port_t *input = jack_port_register(client, inputPortname.c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
 
-    std::string outputPortname = fmt::format("output_{}", i);
+    std::string outputPortname = "output_" << i;
     jack_port_t *output = jack_port_register(client, outputPortname.c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
 
     if (input == nullptr || output == nullptr) {
