@@ -3,6 +3,7 @@
 
 #include <cstring>
 #include <iostream>
+#include <string>
 #include <unistd.h>
 #include <utility>
 #include <vector>
@@ -96,10 +97,10 @@ jack_client_t *initJack(std::string clientName, PortMap &ports) {
 
 void portSetup(jack_client_t *client, uint32_t numPorts, PortMap &ports) {
   for (uint32_t i = 0; i < numPorts; ++i) {
-    std::string inputPortname = "input_" << i;
+    std::string inputPortname = "input_" + std::to_string(i);
     jack_port_t *input = jack_port_register(client, inputPortname.c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
 
-    std::string outputPortname = "output_" << i;
+    std::string outputPortname = "output_" + std::to_string(i);
     jack_port_t *output = jack_port_register(client, outputPortname.c_str(), JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
 
     if (input == nullptr || output == nullptr) {
